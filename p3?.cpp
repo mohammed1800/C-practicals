@@ -3,25 +3,25 @@
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        cout << "Please enter text as command line argument." << endl;
-        return 0;
-    }
-    
-    string text = argv[1];
-    int charCount[26] = {0};
-    
-    for (char c : text) {
-        if (isalpha(c)) {
-            charCount[tolower(c) - 'a']++;
+int main() {
+    int count[26] = {0};
+    string text;
+
+    cout << "Enter the text: ";
+    getline(cin, text);
+
+    for(char c : text) { 
+        if(isalpha(c)) {
+            count[toupper(c) - 'A']++;
         }
     }
-    
-    cout << "Alphabet Count Table:" << endl;
-    for (int i = 0; i < 26; i++) {
-        cout << static_cast<char>('a' + i) << ": " << charCount[i] << endl;
+
+    cout << "Alphabet\tCount\n";
+    for(int i = 0; i < 26; i++) { 
+        if(count[i] > 0) { 
+            cout << (char)('A' + i) << "\t\t" << count[i] << "\n"; 
+        }
     }
-    
+
     return 0;
 }

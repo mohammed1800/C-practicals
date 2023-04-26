@@ -28,10 +28,18 @@ public:
 
 int main() {
     try {
-        Triangle t1(3, 4, 5);
+        double s1,s2,s3;
+        cout<< "enter the sides of the first triangel:" << endl;
+        cin >> s1 >> s2 >> s3;
+        
+        Triangle t1(s1, s2, s3);
         cout << "Area of the triangle using Heron's formula: " << t1.area() << endl;
         
-        Triangle t2(3, 4, 5.5);
+        double s4,s5,s6;
+        cout << "enter the sides of the second triangel:" << endl;
+        cin >> s4 >> s5 >> s6;
+    
+        Triangle t2(s4, s5, s6);
         cout << "Area of the triangle using Heron's formula: " << t2.area() << endl;
     }
     catch (const invalid_argument& e) {

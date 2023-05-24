@@ -1,22 +1,35 @@
 #include <iostream>
 #include <fstream>
-#include <cctype>
+#include <string>
+#include <algorithm>
 
 using namespace std;
 
-int main() {
-    ifstream inFile("input.txt");
-    ofstream outFile("output.txt");
-    
+int main()
+{
+    string inputFile, outputFile;
+    cout << "Enter the input file name: ";
+    cin >> inputFile;
+    cout << "Enter the output file name: ";
+    cin >> outputFile;
+
+    ifstream input(inputFile);
+
+    ofstream output(outputFile);
+
     char c;
-    while (inFile.get(c)) {
-        if (!isspace(c)) {
-            outFile << c;
+    while (input.get(c))
+    {
+        if (!isspace(c))
+        {
+            output.put(c);
         }
     }
-    
-    inFile.close();
-    outFile.close();
-    
+
+    input.close();
+    output.close();
+
+    cout << "Contents of " << inputFile << " copied to " << outputFile << " after removing whitespaces." << endl;
+
     return 0;
 }

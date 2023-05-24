@@ -1,100 +1,67 @@
 #include <iostream>
 #include <fstream>
-#include <string>
-
 using namespace std;
 
 class Student {
-private:
-    int rollNo, year;
-    string name, className;
-    double totalMarks;
 public:
-    Student() : rollNo(0), year(0), name(""), className(""), totalMarks(0.0) {}
-    
-    void setRollNo(int rollNo) {
-        this->rollNo = rollNo;
-    }
-    
-    void setName(string name) {
-        this->name = name;
-    }
-    
-    void setClass(string className) {
-        this->className = className;
-    }
-    
-    void setYear(int year) {
-        this->year = year;
-    }
-    
-    void setTotalMarks(double totalMarks) {
-        this->totalMarks = totalMarks;
-    }
-    
-    int getRollNo() {
-        return rollNo;
-    }
-    
-    string getName() {
-        return name;
-    }
-    
-    string getClass() {
-        return className;
-    }
-    
-    int getYear() {
-        return year;
-    }
-    
-    double getTotalMarks() {
-        return totalMarks;
-    }
-    
-    friend ostream& operator<<(ostream& os, const Student& student);
-    friend istream& operator>>(istream& is, Student& student);
+    int roll_no;
+    string name;
+    string class_name;
+    int year;
+    double total_marks;
 };
 
-ostream& operator<<(ostream& os, const Student& student) {
-    os << student.rollNo << "," << student.name << "," << student.className << "," << student.year << "," << student.totalMarks;
-    return os;
-}
-
-istream& operator>>(istream& is, Student& student) {
-    char comma;
-    is >> student.rollNo >> comma >> student.name >> comma >> student.className >> comma >> student.year >> comma >> student.totalMarks;
-    return is;
-}
-
 int main() {
-    ofstream outFile("students.txt");
-    
-    for (int i = 1; i <= 5; i++) {
-        Student student;
-        student.setRollNo(i);
-        cout << "Enter the name of student " << i << ": ";
-        getline(cin, student.name);
-        cout << "Enter the class of student " << i << ": ";
-        getline(cin, student.className);
-        cout << "Enter the year of student " << i << ": ";
-        cin >> student.year;
-        cout << "Enter the total marks of student " << i << ": ";
-        cin >> student.totalMarks;
-        outFile << student << endl;
-        cin.ignore();
+    Student students[5];
+
+    // read student data
+    for(int i=0; i<5; i++) {
+        cout << "Enter data for student " << i+1 << ":\n";
+        cout << "Roll No.: ";
+        cin >> students[i].roll_no;
+        cout << "Name: ";
+        cin >> students[i].name;
+        cout << "Class: ";
+        cin >> students[i].class_name;
+        cout << "Year: ";
+        cin >> students[i].year;
+        cout << "Total Marks: ";
+        cin >> students[i].total_marks;
     }
-    
-    outFile.close();
-    
-    ifstream inFile("students.txt");
-    
+
+    // write student data to file
+    ofstream outfile("students.dat", ios::binary);
+    if(!outfile) {
+        cerr << "Error: could not open file" << endl;
+        return 1;
+    }
+
+    for(int i=0; i<5; i++) {
+        outfile.write(reinterpret_cast<char*>(&students[i]), sizeof(Student));
+    }
+
+    outfile.close();
+
+    // read student data from file
+    ifstream infile("students.dat", ios::binary);
+    if(!infile) {
+        cerr << "Error: could not open file" << endl;
+        return 1;
+    }
+
     Student student;
-    while (inFile >> student) {
-        cout << student << endl;
+
+    cout << "\nReading data from file...\n";
+    while(infile.read(reinterpret_cast<char*>(&student), sizeof(Student))) {
+        cout << "Roll No.: " << student.roll_no << endl;
+        cout << "Name: " << student.name << endl;
+        cout << "Class: " << student.class_name << endl;
+        cout << "Year: " << student.year << endl;
+        cout << "Total Marks: " << student.total_marks << endl;
+        cout << endl;
     }
-    
-    inFile.close();
-    
+
+    infile.close();
+
     return 0;
 }
